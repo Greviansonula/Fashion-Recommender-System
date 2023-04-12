@@ -3,3 +3,5 @@
 kaggle
 tensorflow==2.12.0
 dvc
+pillow
+tqdm
