@@ -5,3 +5,5 @@ tensorflow==2.12.0
 dvc
 pillow
 tqdm
+scikit-learn
+opencv-python

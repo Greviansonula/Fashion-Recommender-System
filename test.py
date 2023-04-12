@@ -1,12 +1,14 @@
 import pickle
+import tensorflow as tf
 import numpy as np
 from numpy.linalg import norm
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.layers import GlobalMaxPooling2D
 from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input
 from sklearn.neighbors import NearestNeighbors
+import cv2
 
-features_list = np.array(pickle.load(open('embedings.pkl', 'rb')))
+features_list = np.array(pickle.load(open('embeddings.pkl', 'rb')))
 filenames = np.array(pickle.load(open('filenames.pkl', 'rb')))
 
 model = ResNet50(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
@@ -32,4 +34,7 @@ distances, indices = neighbors.kneighbors([normalized_result])
 print(indices)
 
 for file in indices[0]:
-    print(filenames[file])
+    temp_img = cv2.imread(filenames[file])
+    cv2.imshow('output', temp_img)
+
+cv2.waitKey(0)
