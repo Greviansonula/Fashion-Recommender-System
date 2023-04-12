@@ -33,8 +33,10 @@ distances, indices = neighbors.kneighbors([normalized_result])
 
 print(indices)
 
-for file in indices[0]:
-    temp_img = cv2.imread(filenames[file])
-    cv2.imshow('output', temp_img)
+import matplotlib.pyplot as plt
 
-cv2.waitKey(0)
+from PIL import Image
+
+for file in indices[0]:
+    temp_img = Image.open(filenames[file])
+    temp_img.show()
