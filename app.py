@@ -29,18 +29,16 @@ def extract_features(img,  model):
     return normalized_result
 
 filenames = []
-for file in tqdm(os.listdir("data/images")):
+for file in tqdm(os.listdir("data/images")[:10000]):
     filenames.append(os.path.join('data', 'images', file))
 
 feature_list = []
 
-for idx, file in tqdm(enumerate(filenames)):
+for file in tqdm(filenames):
     feature_list.append(extract_features(file, model))
-    if idx == 2000:
-        break
 
 
-pickle.dump(feature_list, open('embeddings.pkl', 'wb'))
-pickle.dump(filenames, open('filenames.pkl', 'wb'))
+pickle.dump(feature_list, open('artifacts/embeddings.pkl', 'wb'))
+pickle.dump(filenames, open('artifacts/filenames.pkl', 'wb'))
 
 print(np.array(feature_list).shape)

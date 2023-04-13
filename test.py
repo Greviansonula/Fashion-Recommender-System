@@ -8,8 +8,8 @@ from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input
 from sklearn.neighbors import NearestNeighbors
 import cv2
 
-features_list = np.array(pickle.load(open('embeddings.pkl', 'rb')))
-filenames = np.array(pickle.load(open('filenames.pkl', 'rb')))
+features_list = np.array(pickle.load(open('artifacts/embeddings.pkl', 'rb')))
+filenames = np.array(pickle.load(open('artifacts/filenames.pkl', 'rb')))
 
 model = ResNet50(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
 model.trainable = False
@@ -19,7 +19,7 @@ model = tf.keras.Sequential([
     GlobalMaxPooling2D()
 ])
 
-img = image.load_img('data/test/test4.jpg', target_size=(224, 224))
+img = image.load_img('data/myntradataset/images/60000.jpg', target_size=(224, 224))
 img_array = image.img_to_array(img) # (224, 224, 3)
 expanded_img_array = np.expand_dims(img_array, axis=0)
 preprocessed_img = preprocess_input(expanded_img_array)
@@ -33,10 +33,11 @@ distances, indices = neighbors.kneighbors([normalized_result])
 
 print(indices)
 
-import matplotlib.pyplot as plt
 
-from PIL import Image
-
-for file in indices[0]:
-    temp_img = Image.open(filenames[file])
-    temp_img.show()
+count = 0
+for file in indices[0][1:6]:
+    count += 1
+    temp_img = cv2.imread(filenames[file])
+    cv2.imshow(f'output-{count}', cv2.resize(temp_img, (512, 512)))
+    
+    cv2.waitKey(0)
