@@ -41,13 +41,38 @@ def feature_extract(img_path, model):
     normalized_result = result / norm(result)
     return normalized_result
 
+def recommend(feateres, feature_list):
+    neighbors = NearestNeighbors(n_neighbors=5, algorithm='brute', metric='euclidean')
+    neighbors.fit(features_list)
+    
+    distances, indices = neighbors.kneighbors([features])
+    
+    return indices
+
+
 uploaded_file = st.file_uploader("Choose an image")
 if uploaded_file is not None:
     if save_uploaded_file(uploaded_file):
         display_image = Image.open(uploaded_file)
+        display_image = display_image.resize((320, 320))
         st.image(display_image)
         features = feature_extract(os.path.join("uploads", uploaded_file.name), model)
-        st.text(features)
+        
+        indices = recommend(features, features_list)
+        
+        col1, col2, col3, col4, col5 = st.columns(5)
+        
+        with col1:
+            st.image(filenames[indices[0][0]])
+        with col2:
+            st.image(filenames[indices[0][1]])
+        with col3:
+            st.image(filenames[indices[0][2]])
+        with col4:
+            st.image(filenames[indices[0][3]])
+        with col5:
+            st.image(filenames[indices[0][4]])
+        
     else:
         st.header("Some error occurred during upload")
     
